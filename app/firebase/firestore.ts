@@ -1,10 +1,9 @@
 // app/firebase/firestore.ts
 
-import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { collection, addDoc, getDocs, DocumentData } from 'firebase/firestore';
 import { db } from './config';
 
-// Add a document
-export const addDocument = async (data: any) => {
+export const addDocument = async (data: DocumentData): Promise<string> => {
   try {
     const docRef = await addDoc(collection(db, 'your-collection'), data);
     console.log("Document written with ID: ", docRef.id);
@@ -15,9 +14,8 @@ export const addDocument = async (data: any) => {
   }
 };
 
-// Get documents
-export const getDocuments = async () => {
-  const documents: any[] = [];
+export const getDocuments = async (): Promise<DocumentData[]> => {
+  const documents: DocumentData[] = [];
   try {
     const querySnapshot = await getDocs(collection(db, 'your-collection'));
     querySnapshot.forEach((doc) => {
