@@ -31,3 +31,16 @@ body {
     text-wrap: balance;
   }
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+.kansha-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3rem;
+  text-align: center;
+  color: #00FFFF;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+  letter-spacing: 2px;
+  margin: 2rem 0;
+  text-transform: uppercase;
+}
