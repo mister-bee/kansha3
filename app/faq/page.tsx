@@ -9,7 +9,7 @@ export default function FAQ() {
         </div>
         <div>
           <h2 className="text-xl font-semibold">How do I sign in?</h2>
-          <p>You can sign in using your Google account on the home page.</p>
+          <p>You can sign in using your Google account on the home page!</p>
         </div>
         {/* Add more FAQ items as needed */}
       </div>
