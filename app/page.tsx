@@ -40,7 +40,7 @@ export default function Home() {
     }
   }, []);
 
-  
+
   useEffect(() => {
     const fetchDocuments = async () => {
       if (typeof window !== 'undefined' && db) {
@@ -100,7 +100,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-8 text-center">
       <h1 className={`${honk.className} text-6xl text-red-500 mb-8`}>
-        Kansha AI
+      Kansha AI 🤖
       </h1>
       {user ? (
         <div>
