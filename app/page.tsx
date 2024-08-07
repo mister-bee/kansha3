@@ -8,9 +8,15 @@ import { auth, db } from './firebase/config';
 import { useAuth } from './hooks/useAuth';
 import { Honk } from 'next/font/google'
 
+// const honk = Honk({ 
+//   subsets: ['latin'],
+//   weight: '400'
+// })
+
 const honk = Honk({ 
   subsets: ['latin'],
-  weight: '400'
+  weight: ['400'],
+  display: 'swap',
 })
 
 interface FirestoreDocument extends DocumentData {
@@ -22,6 +28,19 @@ export default function Home() {
   const [message, setMessage] = useState('');
   const [documents, setDocuments] = useState<FirestoreDocument[]>([]);
 
+  useEffect(() => {
+    if (auth) {
+      console.log("Auth object available");
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+        console.log("Auth state changed", user);
+      });
+      return () => unsubscribe();
+    } else {
+      console.log("Auth object not available");
+    }
+  }, []);
+
+  
   useEffect(() => {
     const fetchDocuments = async () => {
       if (typeof window !== 'undefined' && db) {
