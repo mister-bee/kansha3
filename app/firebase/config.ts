@@ -24,12 +24,6 @@ let analytics: Analytics;
 let auth: Auth;
 let db: Firestore;
 
-// if (typeof window !== "undefined" && !getApps().length) {
-//   app = initializeApp(firebaseConfig);
-//   analytics = getAnalytics(app);
-//   auth = getAuth(app);
-//   db = getFirestore(app);
-// }
 
 if (typeof window !== "undefined" && !getApps().length) {
   try {

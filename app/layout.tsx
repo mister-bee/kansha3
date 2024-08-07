@@ -3,13 +3,13 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import Link from 'next/link'
+import Navbar from './components/Navbar'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Kansha AI 🤖',
-  description: 'Playful AI with Next.js and Firebase',
+  description: 'Playful Gratitude in Classroom Management',
 }
 
 export default function RootLayout({
@@ -20,14 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.className}>
       <body>
-        <nav className="bg-gray-800 text-white p-4">
-          <ul className="flex space-x-4">
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/faq">FAQ</Link></li>
-            <li><Link href="/about">About Us</Link></li>
-          </ul>
-        </nav>
-        {children}
+        <Navbar />
+        <main className="container mx-auto px-4 py-8">
+          {children}
+        </main>
       </body>
     </html>
   )
