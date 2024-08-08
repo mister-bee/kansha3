@@ -1,4 +1,4 @@
-// app/userProfile/page.tsx
+// app/pages/userProfile/page.tsx
 
 'use client'
 
