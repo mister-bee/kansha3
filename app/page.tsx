@@ -1,33 +1,33 @@
 // app/page.tsx
 
-'use client'
-import { useState, useEffect } from 'react';
-import { User } from 'firebase/auth';
-import { signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { auth, db, googleProvider } from './firebase/config';
-import { Honk } from 'next/font/google'
-import { useRouter } from 'next/navigation';
+"use client";
+import { useState, useEffect } from "react";
+import { User } from "firebase/auth";
+import { signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { auth, db, googleProvider } from "./firebase/config";
+import { Honk } from "next/font/google";
+import { useRouter } from "next/navigation";
 
-const honk = Honk({ 
-  subsets: ['latin'],
-  weight: ['400'],
-  display: 'swap',
-})
+const honk = Honk({
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
 
 export default function Home() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [isOnline, setIsOnline] = useState(true);
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       console.log("Auth state changed", currentUser);
@@ -35,21 +35,21 @@ export default function Home() {
       if (currentUser) {
         const userDoc = await getDoc(doc(db, "users", currentUser.uid));
         if (!userDoc.exists()) {
-          router.push('/newUserWelcome');
+          router.push("/newUserWelcome");
         } else {
           const userData = userDoc.data();
-          switch(userData.accountType) {
-            case 'student':
-              router.push('/studentDashboard');
+          switch (userData.accountType) {
+            case "student":
+              router.push("/studentDashboard");
               break;
-            case 'teacher':
-              router.push('/teacherDashboard');
+            case "teacher":
+              router.push("/teacherDashboard");
               break;
-            case 'administrator':
-              router.push('/adminDashboard');
+            case "administrator":
+              router.push("/adminDashboard");
               break;
             default:
-              router.push('/userProfile');
+              router.push("/userProfile");
           }
         }
       }
@@ -57,20 +57,22 @@ export default function Home() {
     });
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
       unsubscribe();
-    }
+    };
   }, [router]);
 
   const handleGoogleSignIn = async () => {
     if (!isOnline) {
-      setMessage("You're offline. Please check your internet connection and try again.");
+      setMessage(
+        "You're offline. Please check your internet connection and try again.",
+      );
       return;
     }
 
     setLoading(true);
-    setMessage('');
+    setMessage("");
 
     try {
       const result = await signInWithPopup(auth, googleProvider);
@@ -86,7 +88,7 @@ export default function Home() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      setMessage('Signed out successfully!');
+      setMessage("Signed out successfully!");
       setUser(null);
     } catch (error) {
       console.error("Error signing out:", error);
@@ -100,14 +102,16 @@ export default function Home() {
         Kansha AI 🤖
       </h1>
       {!isOnline && (
-        <p className="text-red-500 mb-4">You're currently offline. Some features may be unavailable.</p>
+        <p className="text-red-500 mb-4">
+          You're currently offline. Some features may be unavailable.
+        </p>
       )}
       {loading ? (
         <p>Loading...</p>
       ) : user ? (
         <p>Redirecting to your dashboard...</p>
       ) : (
-        <button 
+        <button
           onClick={handleGoogleSignIn}
           disabled={loading || !isOnline}
           className="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transform hover:scale-110 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"

@@ -1,4 +1,4 @@
-// app/pages/teacherDashboard/page.tsx
+// app/teacherDashboard/page.tsx
 
 'use client'
 import { useEffect } from 'react';
