@@ -1,4 +1,4 @@
-// app/UserProfile/page.tsx
+// app/userProfile/page.tsx
 
 'use client'
 
@@ -9,23 +9,37 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { useRouter } from 'next/navigation';
 
-export default function UserProfile() {
+export default function UserProfilePage() {
   const [user, setUser] = useState<User | null>(null);
   const [userData, setUserData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
+    const fetchUserData = async (currentUser: User) => {
+      try {
         const userRef = doc(db, "users", currentUser.uid);
         const userSnap = await getDoc(userRef);
         if (userSnap.exists()) {
           setUserData(userSnap.data());
         }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setError("Failed to load user data. Please try again later.");
+      }
+    };
+
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setLoading(true);
+      setError(null);
+      if (currentUser) {
+        setUser(currentUser);
+        await fetchUserData(currentUser);
       } else {
         router.push('/'); // Redirect to home if not logged in
       }
+      setLoading(false);
     });
 
     return () => unsubscribe();
@@ -37,11 +51,20 @@ export default function UserProfile() {
       router.push('/'); // Redirect to home after logout
     } catch (error) {
       console.error("Error signing out:", error);
+      setError("Failed to sign out. Please try again.");
     }
   };
 
-  if (!user) {
+  if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-500">{error}</div>;
+  }
+
+  if (!user) {
+    return null; // This should not happen due to the redirect in useEffect, but just in case
   }
 
   return (
